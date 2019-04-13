@@ -71,7 +71,7 @@ Todos.propTypes = {
 };
 
 Todos.defaultProps = {
-  todos: [{}]
+  todos: PropTypes.array
 };
 
 export default Todos;

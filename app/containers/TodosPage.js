@@ -7,9 +7,7 @@ import * as actionCreators from '../actions/todos';
 import Todos from '../components/Todos';
 
 function mapStateToProps(state) {
-  return {
-    todos: state
-  };
+  return state;
 }
 
 function mapDispatchToProps(dispatch) {
