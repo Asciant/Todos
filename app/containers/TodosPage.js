@@ -1,19 +1,22 @@
+// App container for mapStateToProps and mapDispatchToState
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Counter from '../components/Counter';
-import * as CounterActions from '../actions/counter';
+
+import * as actionCreators from '../actions/todos';
+
+import Todos from '../components/Todos';
 
 function mapStateToProps(state) {
   return {
-    counter: state.counter
+    todos: state
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(CounterActions, dispatch);
+  return bindActionCreators(actionCreators, dispatch);
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Counter);
+)(Todos);

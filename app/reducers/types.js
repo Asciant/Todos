@@ -1,14 +1,12 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
-export type counterStateType = {
-  +counter: number
-};
+export type todoStateType = Array<{}>;
 
 export type Action = {
   +type: string
 };
 
-export type GetState = () => counterStateType;
+export type GetState = () => todoStateType;
 
 export type Dispatch = ReduxDispatch<Action>;
 
