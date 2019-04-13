@@ -10,26 +10,46 @@ class Todos extends Component {
 
     // React state
     this.state = {
-      task: ''
+      task: '',
+      error: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  // Handle change and remove the error styles once len > 0
+  handleChange = (e, { name, value }) => {
+    // Doesn't validate the name field, assumes only one input
+    // Check the value > 0 and remove error if it is
+    // Don't modify error at all if not, to avoid error when user deletes their input but doesn't submit
+    if (value.length > 0) {
+      this.setState({ [name]: value, error: false });
+    } else {
+      this.setState({ [name]: value });
+    }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
+
+    // Destructure all the objects
     const { task } = this.state;
     const { addTodo } = this.props;
-    addTodo(task);
-    this.setState({ task: '' });
+
+    // Check the task length, apply error visual effect if len 0
+    // Add the todo and reset the form if a string has been provided
+    if (task.length === 0) {
+      this.setState({ task, error: true });
+    } else {
+      addTodo(task);
+      this.setState({ task: '', error: false });
+    }
   };
 
   render() {
     const { todos } = this.props;
-    const { task } = this.state;
+    const { task, error } = this.state;
 
     return (
       <div>
@@ -38,6 +58,7 @@ class Todos extends Component {
             size="large"
             fluid
             focus
+            error={error}
             placeholder="I need to do...."
             name="task"
             onChange={this.handleChange}
