@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+import { Container } from 'semantic-ui-react';
 import type { Store } from '../reducers/types';
 import Routes from '../Routes';
 
@@ -16,7 +17,9 @@ export default class Root extends Component<Props> {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <Routes />
+          <Container text style={{ marginTop: '1em' }}>
+            <Routes />
+          </Container>
         </ConnectedRouter>
       </Provider>
     );
