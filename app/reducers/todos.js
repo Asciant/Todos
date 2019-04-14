@@ -24,11 +24,26 @@ function todoReducer(state = [], action) {
       ];
     }
     case 'REMOVE_TODO': {
-      console.log(action);
       // Return everything before and after, with the exception of the selection
       return [
         // State up until the todo's index
         ...state.slice(0, action.index),
+        // after the deleted one, until the end
+        ...state.slice(action.index + 1)
+        // essentially the todo is being omitted from the new array
+      ];
+    }
+    case 'EDIT_TODO': {
+      // Use the remove todo functionality to remove the existing todo and replace it with a new todo object
+
+      // ! This functionality is not currently used
+      // ! Refer handleUpdate in Todos component
+
+      return [
+        // State up until the todo's index
+        ...state.slice(0, action.index),
+        // Add our updated todo in place
+        action.todo,
         // after the deleted one, until the end
         ...state.slice(action.index + 1)
         // essentially the todo is being omitted from the new array
