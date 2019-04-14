@@ -21,9 +21,10 @@ export function editTodo(todo, index) {
   };
 }
 
-export function toggleTodo(todo) {
+export function toggleTodo(todo, index) {
   return {
     type: 'TOGGLE_TODO',
-    todo
+    todo,
+    index
   };
 }

@@ -1,14 +1,9 @@
-import * as Identicon from 'identicon.js';
 import * as Md5 from 'md5.js';
 
 function todoReducer(state = [], action) {
   const key = new Md5()
     .update(btoa(Math.random()).substring(0, 30))
     .digest('hex');
-  const icon = new Identicon(btoa(Math.random()).substring(0, 30), {
-    size: 64,
-    format: 'svg'
-  }).toString();
 
   switch (action.type) {
     case 'ADD_TODO': {
@@ -18,7 +13,7 @@ function todoReducer(state = [], action) {
         {
           task: action.task,
           date: Date.now(),
-          icon,
+          complete: false,
           key
         }
       ];
@@ -44,6 +39,19 @@ function todoReducer(state = [], action) {
         ...state.slice(0, action.index),
         // Add our updated todo in place
         action.todo,
+        // after the deleted one, until the end
+        ...state.slice(action.index + 1)
+        // essentially the todo is being omitted from the new array
+      ];
+    }
+    case 'TOGGLE_TODO': {
+      const toggledTodo = action.todo;
+      toggledTodo.complete = !toggledTodo.complete;
+      return [
+        // State up until the todo's index
+        ...state.slice(0, action.index),
+        // Add our updated todo in place
+        toggledTodo,
         // after the deleted one, until the end
         ...state.slice(action.index + 1)
         // essentially the todo is being omitted from the new array

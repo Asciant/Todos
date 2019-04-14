@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, List, Image, Button } from 'semantic-ui-react';
+import { Input, List, Button, Checkbox } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { distanceInWordsToNow } from 'date-fns';
@@ -30,7 +30,13 @@ class Todos extends Component {
     }
   };
 
-  handleUpdate = (todo, index, e) => {
+  handleToggle = (todo, index, e) => {
+    e.preventDefault();
+    const { toggleTodo } = this.props;
+    toggleTodo(todo, index);
+  };
+
+  handleEdit = (todo, index, e) => {
     // First lets remove the todo form the list
     e.preventDefault();
     const { removeTodo } = this.props;
@@ -60,7 +66,7 @@ class Todos extends Component {
   render() {
     const { todos, removeTodo } = this.props;
     const { task, error } = this.state;
-    const { handleUpdate } = this;
+    const { handleEdit, handleToggle } = this;
 
     return (
       <div>
@@ -81,17 +87,22 @@ class Todos extends Component {
           {todos.map((d, i) => (
             <List.Item key={d.key}>
               <List.Content floated="right">
-                <Button onClick={handleUpdate.bind(null, d, i)}>Edit</Button>
+                <Button onClick={handleEdit.bind(null, d, i)}>Edit</Button>
                 <Button onClick={removeTodo.bind(null, d, i)}>Delete</Button>
               </List.Content>
-              <Image avatar src={`data:image/svg+xml;base64,${d.icon}`} />
-              <List.Content>
-                <List.Header as="a">{d.task}</List.Header>
-                Created{' '}
-                {distanceInWordsToNow(d.date, {
-                  includeSeconds: true
-                })}{' '}
-                ago
+              <List.Content floated="left">
+                <Checkbox
+                  label={d.task}
+                  name="completed"
+                  checked={d.complete}
+                  onChange={handleToggle.bind(null, d, i)}
+                />
+                <p>
+                  {distanceInWordsToNow(d.date, {
+                    includeSeconds: true
+                  })}{' '}
+                  ago
+                </p>
               </List.Content>
             </List.Item>
           ))}
@@ -104,7 +115,8 @@ class Todos extends Component {
 Todos.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
   addTodo: PropTypes.func.isRequired,
-  removeTodo: PropTypes.func.isRequired
+  removeTodo: PropTypes.func.isRequired,
+  toggleTodo: PropTypes.func.isRequired
 };
 
 Todos.defaultProps = {
