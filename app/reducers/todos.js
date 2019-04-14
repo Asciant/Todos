@@ -47,14 +47,25 @@ function todoReducer(state = [], action) {
     case 'TOGGLE_TODO': {
       const toggledTodo = action.todo;
       toggledTodo.complete = !toggledTodo.complete;
+      if (toggledTodo.complete === true) {
+        // Its complete, so to the bottom
+        return [
+          // State up until the todo's index
+          ...state.slice(0, action.index),
+          // after the current one, until the end
+          ...state.slice(action.index + 1),
+          // Add our updated todo in place
+          toggledTodo
+        ];
+      }
+      // Its not complete, so back to the top
       return [
-        // State up until the todo's index
-        ...state.slice(0, action.index),
         // Add our updated todo in place
         toggledTodo,
-        // after the deleted one, until the end
+        // State up until the todo's index
+        ...state.slice(0, action.index),
+        // after the current one, until the end
         ...state.slice(action.index + 1)
-        // essentially the todo is being omitted from the new array
       ];
     }
     default:
