@@ -44,6 +44,19 @@ function todoReducer(state = [], action) {
         // essentially the todo is being omitted from the new array
       ];
     }
+    case 'TOGGLE_TODO': {
+      const toggledTodo = action.todo;
+      toggledTodo.complete = !toggledTodo.complete;
+      return [
+        // State up until the todo's index
+        ...state.slice(0, action.index),
+        // Add our updated todo in place
+        toggledTodo,
+        // after the deleted one, until the end
+        ...state.slice(action.index + 1)
+        // essentially the todo is being omitted from the new array
+      ];
+    }
     default:
       return state;
   }
