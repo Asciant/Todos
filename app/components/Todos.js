@@ -96,6 +96,9 @@ class Todos extends Component {
                   name="completed"
                   checked={d.complete}
                   onChange={handleToggle.bind(null, d, i)}
+                  style={{
+                    textDecoration: d.complete ? 'line-through' : 'none'
+                  }}
                 />
                 <p>
                   {distanceInWordsToNow(d.date, {
