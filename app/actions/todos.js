@@ -13,6 +13,14 @@ export function removeTodo(todo, index) {
   };
 }
 
+export function editTodo(todo, index) {
+  return {
+    type: 'EDIT_TODO',
+    todo,
+    index
+  };
+}
+
 export function toggleTodo(todo) {
   return {
     type: 'TOGGLE_TODO',

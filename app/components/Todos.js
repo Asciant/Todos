@@ -30,6 +30,16 @@ class Todos extends Component {
     }
   };
 
+  handleUpdate = (todo, index, e) => {
+    // First lets remove the todo form the list
+    e.preventDefault();
+    const { removeTodo } = this.props;
+    removeTodo(todo, index);
+
+    // Update the form to include the task
+    this.setState({ task: todo.task });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
 
@@ -50,6 +60,7 @@ class Todos extends Component {
   render() {
     const { todos, removeTodo } = this.props;
     const { task, error } = this.state;
+    const { handleUpdate } = this;
 
     return (
       <div>
@@ -70,6 +81,7 @@ class Todos extends Component {
           {todos.map((d, i) => (
             <List.Item key={d.key}>
               <List.Content floated="right">
+                <Button onClick={handleUpdate.bind(null, d, i)}>Edit</Button>
                 <Button onClick={removeTodo.bind(null, d, i)}>Delete</Button>
               </List.Content>
               <Image avatar src={`data:image/svg+xml;base64,${d.icon}`} />
