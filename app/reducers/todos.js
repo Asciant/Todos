@@ -12,6 +12,7 @@ function todoReducer(state = [], action) {
 
   switch (action.type) {
     case 'ADD_TODO': {
+      // Add to the end of the previous state
       return [
         ...state,
         {
@@ -20,6 +21,17 @@ function todoReducer(state = [], action) {
           icon,
           key
         }
+      ];
+    }
+    case 'REMOVE_TODO': {
+      console.log(action);
+      // Return everything before and after, with the exception of the selection
+      return [
+        // State up until the todo's index
+        ...state.slice(0, action.index),
+        // after the deleted one, until the end
+        ...state.slice(action.index + 1)
+        // essentially the todo is being omitted from the new array
       ];
     }
     default:

@@ -5,16 +5,17 @@ export function addTodo(task) {
   };
 }
 
-export function removeTodo(todo) {
+export function removeTodo(todo, index) {
   return {
     type: 'REMOVE_TODO',
-    todo
+    todo,
+    index
   };
 }
 
 export function toggleTodo(todo) {
   return {
-    type: 'ADD_TODO',
+    type: 'TOGGLE_TODO',
     todo
   };
 }

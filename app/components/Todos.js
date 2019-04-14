@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, List, Image } from 'semantic-ui-react';
+import { Input, List, Image, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { distanceInWordsToNow } from 'date-fns';
@@ -48,7 +48,7 @@ class Todos extends Component {
   };
 
   render() {
-    const { todos } = this.props;
+    const { todos, removeTodo } = this.props;
     const { task, error } = this.state;
 
     return (
@@ -67,8 +67,11 @@ class Todos extends Component {
         </form>
 
         <List relaxed verticalAlign="middle">
-          {todos.map(d => (
+          {todos.map((d, i) => (
             <List.Item key={d.key}>
+              <List.Content floated="right">
+                <Button onClick={removeTodo.bind(null, d, i)}>Delete</Button>
+              </List.Content>
               <Image avatar src={`data:image/svg+xml;base64,${d.icon}`} />
               <List.Content>
                 <List.Header as="a">{d.task}</List.Header>
@@ -88,7 +91,8 @@ class Todos extends Component {
 
 Todos.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
-  addTodo: PropTypes.func.isRequired
+  addTodo: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired
 };
 
 Todos.defaultProps = {
