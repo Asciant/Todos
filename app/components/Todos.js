@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, List, Image, Button } from 'semantic-ui-react';
+import { Input, List, Button, Checkbox } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { distanceInWordsToNow } from 'date-fns';
@@ -84,14 +84,14 @@ class Todos extends Component {
                 <Button onClick={handleUpdate.bind(null, d, i)}>Edit</Button>
                 <Button onClick={removeTodo.bind(null, d, i)}>Delete</Button>
               </List.Content>
-              <Image avatar src={`data:image/svg+xml;base64,${d.icon}`} />
-              <List.Content>
-                <List.Header as="a">{d.task}</List.Header>
-                Created{' '}
-                {distanceInWordsToNow(d.date, {
-                  includeSeconds: true
-                })}{' '}
-                ago
+              <List.Content floated="left">
+                <Checkbox label={d.task} />
+                <p>
+                  {distanceInWordsToNow(d.date, {
+                    includeSeconds: true
+                  })}{' '}
+                  ago
+                </p>
               </List.Content>
             </List.Item>
           ))}
