@@ -66,15 +66,16 @@ class Task extends Component {
   handleToggle = (todo, index, e) => {
     e.preventDefault();
 
-    const { toggleTodo } = this.props;
-    toggleTodo(todo, index);
+    // const { toggleTodo } = this.props;
+    // toggleTodo(todo, index);
   };
 
   handleEdit = (todo, index, e) => {
     // First lets remove the todo form the list
     e.preventDefault();
-    const { removeTodo } = this.props;
-    removeTodo(todo, index);
+
+    // const { removeTodo } = this.props;
+    // removeTodo(todo, index);
 
     // Update the form to include the task
     // this.setState({ task: todo.task });
