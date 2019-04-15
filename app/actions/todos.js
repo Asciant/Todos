@@ -2,7 +2,8 @@ import {
   ADD_TODO,
   EDIT_TODO,
   REMOVE_TODO,
-  TOGGLE_TODO
+  TOGGLE_TODO,
+  REORDER_TODO
 } from '../constants/actions';
 
 export function addTodo(task) {
@@ -33,5 +34,12 @@ export function toggleTodo(todo, index) {
     type: TOGGLE_TODO,
     todo,
     index
+  };
+}
+
+export function reorderTodos(orderedTodos) {
+  return {
+    type: REORDER_TODO,
+    orderedTodos
   };
 }
