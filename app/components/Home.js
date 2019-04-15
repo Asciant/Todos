@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import routes from '../constants/routes';
-import styles from './Home.css';
 
 type Props = {};
 
@@ -14,7 +13,7 @@ export default class Home extends Component<Props> {
 
   render() {
     return (
-      <div className={styles.container} data-tid="container">
+      <div data-tid="container">
         <h2>Home</h2>
         <p>
           <FontAwesomeIcon icon={faCoffee} />

@@ -24,6 +24,10 @@ const Input = styled.input`
   }
 `;
 
+// * This makes the styled component return as functional component
+// ! Not currently required
+// https://codepen.io/fionnachan/pen/pGXwxo?editors=0010
+
 class Todos extends Component {
   constructor(props) {
     super(props);
@@ -62,14 +66,14 @@ class Todos extends Component {
   };
 
   // Handle change and remove the error styles once len > 0
-  handleChange = (e, { name, value }) => {
+  handleChange = event => {
     // Doesn't validate the name field, assumes only one input
     // Check the value > 0 and remove error if it is
     // Don't modify error at all if not, to avoid error when user deletes their input but doesn't submit
-    if (value.length > 0) {
-      this.setState({ [name]: value, error: false });
+    if (event.target.value.length > 0) {
+      this.setState({ [event.target.name]: event.target.value, error: false });
     } else {
-      this.setState({ [name]: value });
+      this.setState({ [event.target.name]: event.target.value });
     }
   };
 
@@ -99,10 +103,11 @@ class Todos extends Component {
         <form onSubmit={this.handleSubmit}>
           <Input
             error={error}
-            placeholder="I need to do...."
-            name="task"
             onChange={this.handleChange}
             value={task}
+            type="text"
+            placeholder="I need to do...."
+            name="task"
           />
         </form>
 
