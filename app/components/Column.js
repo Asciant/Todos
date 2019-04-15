@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { List } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import { Droppable } from 'react-beautiful-dnd';
 import Task from '../containers/TaskPage';
 
@@ -22,11 +22,9 @@ class Column extends Component {
             {...provided.droppableProps}
             isDraggingOver={snapshot.isDraggingOver}
           >
-            <List relaxed verticalAlign="middle" key="some-key">
-              {todos.map((d, i) => (
-                <Task key={d.key} todo={d} index={i} />
-              ))}
-            </List>
+            {todos.map((d, i) => (
+              <Task key={d.key} todo={d} index={i} />
+            ))}
             {provided.placeholder}
           </TaskList>
         )}
@@ -34,5 +32,18 @@ class Column extends Component {
     );
   }
 }
+
+// TODO Move these into a file that can be imported for any redux connected component
+Column.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object),
+  column: PropTypes.shape({ id: PropTypes.number }),
+  addTodo: PropTypes.func.isRequired,
+  reorderTodos: PropTypes.func.isRequired
+};
+
+Column.defaultProps = {
+  todos: PropTypes.array,
+  column: PropTypes.object
+};
 
 export default Column;
