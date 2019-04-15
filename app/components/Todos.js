@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
-import Column from './Column';
+import Column from '../containers/ColumnPage';
 
 const Container = styled.div`
   display: grid;
@@ -95,6 +95,9 @@ class Todos extends Component {
   };
 
   render() {
+    console.log('Props from the Task');
+    console.log(this.props);
+
     const { todos } = this.props;
     const { task, error } = this.state;
 

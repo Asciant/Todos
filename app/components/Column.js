@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { List } from 'semantic-ui-react';
 import { Droppable } from 'react-beautiful-dnd';
-import Task from './Task';
+import Task from '../containers/TaskPage';
 
 const TaskList = styled.div`
   transition: background-color 0.2s ease;
@@ -13,6 +13,8 @@ const TaskList = styled.div`
 class Column extends Component {
   render() {
     const { column, todos } = this.props;
+    console.log('Props from the Column');
+    console.log(this.props);
 
     return (
       <Droppable droppableId={column.id}>
