@@ -47,7 +47,7 @@ class Todos extends Component {
 
   onDragEnd = result => {
     const { destination, source } = result;
-    const { todos } = this.props;
+    const { todos, reorderTodos } = this.props;
 
     if (!destination) {
       return true;
@@ -71,8 +71,7 @@ class Todos extends Component {
     newTaskIds.splice(source.index, 1);
     newTaskIds.splice(destination.index, 0, todos[source.index]);
 
-    console.log('newTaskIds', newTaskIds);
-    console.log('todos', todos);
+    reorderTodos(newTaskIds);
   };
 
   // Handle change and remove the error styles once len > 0
@@ -129,7 +128,8 @@ class Todos extends Component {
 
 Todos.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
-  addTodo: PropTypes.func.isRequired
+  addTodo: PropTypes.func.isRequired,
+  reorderTodos: PropTypes.func.isRequired
 };
 
 Todos.defaultProps = {

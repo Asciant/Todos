@@ -1,12 +1,20 @@
 import * as Md5 from 'md5.js';
 
+import {
+  ADD_TODO,
+  EDIT_TODO,
+  REMOVE_TODO,
+  TOGGLE_TODO,
+  REORDER_TODO
+} from '../constants/actions';
+
 function todoReducer(state = [], action) {
   const key = new Md5()
     .update(btoa(Math.random()).substring(0, 30))
     .digest('hex');
 
   switch (action.type) {
-    case 'ADD_TODO': {
+    case ADD_TODO: {
       // Add to the end of the previous state
       return [
         ...state,
@@ -18,7 +26,7 @@ function todoReducer(state = [], action) {
         }
       ];
     }
-    case 'REMOVE_TODO': {
+    case REMOVE_TODO: {
       // Return everything before and after, with the exception of the selection
       return [
         // State up until the todo's index
@@ -28,7 +36,7 @@ function todoReducer(state = [], action) {
         // essentially the todo is being omitted from the new array
       ];
     }
-    case 'EDIT_TODO': {
+    case EDIT_TODO: {
       // Use the remove todo functionality to remove the existing todo and replace it with a new todo object
 
       // ! This functionality is not currently used
@@ -44,7 +52,7 @@ function todoReducer(state = [], action) {
         // essentially the todo is being omitted from the new array
       ];
     }
-    case 'TOGGLE_TODO': {
+    case TOGGLE_TODO: {
       const toggledTodo = action.todo;
       toggledTodo.complete = !toggledTodo.complete;
       if (toggledTodo.complete === true) {
@@ -67,6 +75,9 @@ function todoReducer(state = [], action) {
         // after the current one, until the end
         ...state.slice(action.index + 1)
       ];
+    }
+    case REORDER_TODO: {
+      return action.orderedTodos;
     }
     default:
       return state;
