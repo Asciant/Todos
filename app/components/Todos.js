@@ -15,6 +15,8 @@ const Input = styled.input`
   padding: 0.8rem 1.6rem;
   border-radius: 0.4rem;
   transition: box-shadow var(300ms);
+  border-color: ${props => (props.error ? 'red' : 'none')};
+  background-color: ${props => (props.error ? 'red' : 'none')}
   & ::placeholder {
     color: #b0bec5;
   }
@@ -67,7 +69,6 @@ class Todos extends Component {
 
   // Handle change and remove the error styles once len > 0
   handleChange = event => {
-    // Doesn't validate the name field, assumes only one input
     // Check the value > 0 and remove error if it is
     // Don't modify error at all if not, to avoid error when user deletes their input but doesn't submit
     if (event.target.value.length > 0) {
@@ -95,10 +96,6 @@ class Todos extends Component {
   };
 
   render() {
-    console.log('Props from the Task');
-    console.log(this.props);
-
-    const { todos } = this.props;
     const { task, error } = this.state;
 
     return (
@@ -115,7 +112,7 @@ class Todos extends Component {
         </form>
 
         <DragDropContext onDragEnd={this.onDragEnd}>
-          <Column key="1" column={{ id: 1 }} todos={todos} />
+          <Column key="1" column={{ id: 1 }} />
         </DragDropContext>
       </Container>
     );
@@ -123,12 +120,7 @@ class Todos extends Component {
 }
 
 Todos.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.object),
   addTodo: PropTypes.func.isRequired
-};
-
-Todos.defaultProps = {
-  todos: PropTypes.array
 };
 
 export default Todos;

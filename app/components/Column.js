@@ -13,8 +13,6 @@ const TaskList = styled.div`
 class Column extends Component {
   render() {
     const { column, todos } = this.props;
-    console.log('Props from the Column');
-    console.log(this.props);
 
     return (
       <Droppable droppableId={column.id}>

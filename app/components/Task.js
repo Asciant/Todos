@@ -66,31 +66,26 @@ class Task extends Component {
   handleToggle = (todo, index, e) => {
     e.preventDefault();
 
-    // const { toggleTodo } = this.props;
-    // toggleTodo(todo, index);
+    const { toggleTodo } = this.props;
+    toggleTodo(todo, index);
   };
 
   handleEdit = (todo, index, e) => {
     // First lets remove the todo form the list
     e.preventDefault();
 
-    // const { removeTodo } = this.props;
-    // removeTodo(todo, index);
+    const { removeTodo } = this.props;
+    removeTodo(todo, index);
 
     // Update the form to include the task
+    // This won't work as the form is in the Todos component
+    // Edit in place would be better.
     // this.setState({ task: todo.task });
   };
 
-  // This is just a placeholder
-  // ! Don't forget to implement this
-  removeTodo = () => {};
-
-  // ! Impelement this too
-  handleKeyDown = () => {};
-
   render() {
-    const { handleEdit, handleToggle, removeTodo, handleKeyDown } = this;
-    const { todo, index } = this.props;
+    const { handleEdit, handleToggle } = this;
+    const { todo, index, removeTodo } = this.props;
 
     return (
       <Draggable draggableId={todo.key} index={index}>
@@ -105,7 +100,7 @@ class Task extends Component {
                 onClick={handleToggle.bind(this, todo, index)}
                 role="link"
                 tabIndex="0"
-                onKeyPress={handleKeyDown.bind(this, todo, index)}
+                onKeyPress={handleToggle.bind(this, todo, index)}
               >
                 <FontAwesomeIcon
                   size="2x"
@@ -130,7 +125,7 @@ class Task extends Component {
               <span
                 onClick={handleEdit.bind(this, todo, index)}
                 role="link"
-                onKeyPress={handleKeyDown.bind(this, todo, index)}
+                onKeyPress={handleEdit.bind(this, todo, index)}
                 tabIndex="0"
               >
                 <FontAwesomeIcon size="2x" icon={faEdit} />
@@ -138,7 +133,7 @@ class Task extends Component {
               <span
                 onClick={removeTodo.bind(this, todo, index)}
                 role="link"
-                onKeyPress={handleKeyDown.bind(this, todo, index)}
+                onKeyPress={removeTodo.bind(this, todo, index)}
                 tabIndex="0"
               >
                 <FontAwesomeIcon size="2x" icon={faTrashAlt} />
