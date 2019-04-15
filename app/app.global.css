@@ -1,1 +1,8 @@
-@import '~semantic-ui-css/semantic.min.css';
+html {
+  box-sizing: border-box;
+  margin: 50px;
+}
+
+body {
+  background-color: #264653;
+}

@@ -1,8 +1,28 @@
 import React, { Component } from 'react';
-import { Input, List, Button, Checkbox } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import { DragDropContext } from 'react-beautiful-dnd';
+import styled from 'styled-components';
 
-import { distanceInWordsToNow } from 'date-fns';
+import Column from './Column';
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+`;
+
+const Input = styled.input`
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.4rem;
+  transition: box-shadow var(300ms);
+  & ::placeholder {
+    color: #b0bec5;
+  }
+  & :focus {
+    outline: none;
+    box-shadow: 0.2rem 0.8rem 1.6rem var(#4527a0);
+  }
+`;
 
 class Todos extends Component {
   constructor(props) {
@@ -16,7 +36,30 @@ class Todos extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
   }
+
+  onDragEnd = result => {
+    const { destination, source, draggableId } = result;
+    // Draggable ID is the task array index that was dragged
+
+    // ! This is purely a placeholder and workaround no-unused-vars
+    if (!draggableId) {
+      return true;
+    }
+
+    if (!destination) {
+      return true;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      // User dropped back into same position
+      return true;
+    }
+  };
 
   // Handle change and remove the error styles once len > 0
   handleChange = (e, { name, value }) => {
@@ -28,22 +71,6 @@ class Todos extends Component {
     } else {
       this.setState({ [name]: value });
     }
-  };
-
-  handleToggle = (todo, index, e) => {
-    e.preventDefault();
-    const { toggleTodo } = this.props;
-    toggleTodo(todo, index);
-  };
-
-  handleEdit = (todo, index, e) => {
-    // First lets remove the todo form the list
-    e.preventDefault();
-    const { removeTodo } = this.props;
-    removeTodo(todo, index);
-
-    // Update the form to include the task
-    this.setState({ task: todo.task });
   };
 
   handleSubmit = e => {
@@ -64,17 +91,13 @@ class Todos extends Component {
   };
 
   render() {
-    const { todos, removeTodo } = this.props;
+    const { todos } = this.props;
     const { task, error } = this.state;
-    const { handleEdit, handleToggle } = this;
 
     return (
-      <div>
+      <Container>
         <form onSubmit={this.handleSubmit}>
           <Input
-            size="large"
-            fluid
-            focus
             error={error}
             placeholder="I need to do...."
             name="task"
@@ -83,43 +106,17 @@ class Todos extends Component {
           />
         </form>
 
-        <List relaxed verticalAlign="middle">
-          {todos.map((d, i) => (
-            <List.Item key={d.key}>
-              <List.Content floated="right">
-                <Button onClick={handleEdit.bind(null, d, i)}>Edit</Button>
-                <Button onClick={removeTodo.bind(null, d, i)}>Delete</Button>
-              </List.Content>
-              <List.Content floated="left">
-                <Checkbox
-                  label={d.task}
-                  name="completed"
-                  checked={d.complete}
-                  onChange={handleToggle.bind(null, d, i)}
-                  style={{
-                    textDecoration: d.complete ? 'line-through' : 'none'
-                  }}
-                />
-                <p>
-                  {distanceInWordsToNow(d.date, {
-                    includeSeconds: true
-                  })}{' '}
-                  ago
-                </p>
-              </List.Content>
-            </List.Item>
-          ))}
-        </List>
-      </div>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <Column key="1" column={{ id: 1 }} todos={todos} />
+        </DragDropContext>
+      </Container>
     );
   }
 }
 
 Todos.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
-  addTodo: PropTypes.func.isRequired,
-  removeTodo: PropTypes.func.isRequired,
-  toggleTodo: PropTypes.func.isRequired
+  addTodo: PropTypes.func.isRequired
 };
 
 Todos.defaultProps = {
