@@ -46,13 +46,8 @@ class Todos extends Component {
   }
 
   onDragEnd = result => {
-    const { destination, source, draggableId } = result;
-    // Draggable ID is the task array index that was dragged
-
-    // ! This is purely a placeholder and workaround no-unused-vars
-    if (!draggableId) {
-      return true;
-    }
+    const { destination, source } = result;
+    const { todos } = this.props;
 
     if (!destination) {
       return true;
@@ -65,6 +60,19 @@ class Todos extends Component {
       // User dropped back into same position
       return true;
     }
+
+    // We don't actually use the draggableId
+    // Our array is based on numerical indexes
+    // React Beautiful DND lost its mind when I provided 0 as the id
+
+    // We only have one column - so don't get too fancy
+    // const column = source.droppableId;
+    const newTaskIds = Array.from(todos);
+    newTaskIds.splice(source.index, 1);
+    newTaskIds.splice(destination.index, 0, todos[source.index]);
+
+    console.log('newTaskIds', newTaskIds);
+    console.log('todos', todos);
   };
 
   // Handle change and remove the error styles once len > 0
@@ -120,7 +128,12 @@ class Todos extends Component {
 }
 
 Todos.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object),
   addTodo: PropTypes.func.isRequired
+};
+
+Todos.defaultProps = {
+  todos: PropTypes.array
 };
 
 export default Todos;

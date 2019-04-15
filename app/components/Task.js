@@ -87,6 +87,8 @@ class Task extends Component {
     const { handleEdit, handleToggle } = this;
     const { todo, index, removeTodo } = this.props;
 
+    console.log(this.props);
+
     return (
       <Draggable draggableId={todo.key} index={index}>
         {(provided, snapshot) => (
