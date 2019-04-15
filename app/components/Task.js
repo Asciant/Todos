@@ -19,13 +19,13 @@ const List = styled.div`
   grid-template-rows: repeat(2, 1fr);
   grid-gap: 5px;
   margin-bottom: 10px;
+  background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
 `;
 const Icon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   grid-row: span 2;
-  background-color: white;
   color: black;
 `;
 
