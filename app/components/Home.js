@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 
 import Column from '../containers/ColumnPage';
@@ -85,33 +85,35 @@ class Home extends Component {
     reorderTodos(newTaskIds);
   };
 
-  addNewColumn = () => {
-    // this.setState(prevState => {
-    //   const { columns } = prevState;
-    //   const newIndex = columns.length + 1;
-    //   columns.push({ id: newIndex });
-    //   return {
-    //     ...prevState,
-    //     columns
-    //   };
-    // });
-  };
-
   render() {
-    const { columns } = this.props;
+    const { columns, addColumn } = this.props;
+    console.log(this.props);
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
         <ButtonContainer>
           <Item>
-            <New onClick={this.addNewColumn.bind(null)}>Add a new column</New>
+            <New onClick={addColumn.bind(this, null)}>Add a new column</New>
           </Item>
         </ButtonContainer>
-        <Container>
-          {columns.map(column => {
-            return <Column key={column.id} column={column} />;
-          })}
-        </Container>
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="column"
+        >
+          {provided => (
+            <Container {...provided.droppableProps} ref={provided.innerRef}>
+              {columns.map((column, index) => (
+                <Column
+                  key={column.key}
+                  column={column}
+                  index={index}
+                  {...provided.dragHandleProps}
+                />
+              ))}
+            </Container>
+          )}
+        </Droppable>
       </DragDropContext>
     );
   }
@@ -120,7 +122,8 @@ class Home extends Component {
 Home.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
   columns: PropTypes.arrayOf(PropTypes.object),
-  reorderTodos: PropTypes.func.isRequired
+  reorderTodos: PropTypes.func.isRequired,
+  addColumn: PropTypes.func.isRequired
 };
 
 Home.defaultProps = {

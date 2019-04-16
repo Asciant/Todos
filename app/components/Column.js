@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Task from '../containers/TaskPage';
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 20px;
-  padding: 45px;
-  background-color: #ffffff;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-`;
 
 const TaskList = styled.div`
   transition: background-color 0.2s ease;
@@ -22,6 +13,9 @@ const TaskList = styled.div`
 const Item = styled.div`
   display: grid;
   padding: 5px;
+  padding: 45px;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `;
 
 const Input = styled.input`
@@ -79,39 +73,48 @@ class Column extends Component {
   };
 
   render() {
-    const { column, todos } = this.props;
+    const { column, index, todos } = this.props;
     const { task, error } = this.state;
 
-    return (
-      <Container>
-        <Item>
-          <form onSubmit={this.handleSubmit}>
-            <Input
-              error={error}
-              onChange={this.handleChange}
-              value={task}
-              type="text"
-              placeholder="I need to do...."
-              name="task"
-            />
-          </form>
+    console.log('this.props', this.props);
 
-          <Droppable droppableId={column.id}>
-            {(provided, snapshot) => (
-              <TaskList
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                isDraggingOver={snapshot.isDraggingOver}
-              >
-                {todos.map((d, i) => (
-                  <Task key={d.key} todo={d} index={i} />
-                ))}
-                {provided.placeholder}
-              </TaskList>
-            )}
-          </Droppable>
-        </Item>
-      </Container>
+    return (
+      <Draggable draggableId={column.key} index={index}>
+        {provided => (
+          <Item
+            {...provided.draggableProps}
+            ref={provided.innerRef}
+            {...provided.dragHandleProps}
+          >
+            <form onSubmit={this.handleSubmit}>
+              <Input
+                error={error}
+                onChange={this.handleChange}
+                value={task}
+                type="text"
+                placeholder="I need to do...."
+                name="task"
+              />
+            </form>
+            {/*eslint-disable */}
+            <Droppable droppableId="column.key">
+              {(provided, snapshot) => (
+                <TaskList
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  isDraggingOver={snapshot.isDraggingOver}
+                >
+                  {todos.map((d, i) => (
+                    <Task key={d.key} todo={d} index={i} />
+                  ))}
+                  {provided.placeholder}
+                </TaskList>
+              )}
+            </Droppable>
+            {/* eslint-enable */}
+          </Item>
+        )}
+      </Draggable>
     );
   }
 }
@@ -121,12 +124,14 @@ Column.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
   column: PropTypes.shape({ id: PropTypes.number }),
   addTodo: PropTypes.func.isRequired,
-  reorderTodos: PropTypes.func.isRequired
+  reorderTodos: PropTypes.func.isRequired,
+  index: PropTypes.number
 };
 
 Column.defaultProps = {
   todos: PropTypes.array,
-  column: PropTypes.object
+  column: PropTypes.object,
+  index: PropTypes.number
 };
 
 export default Column;
