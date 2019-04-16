@@ -18,9 +18,12 @@ function columnReducer(state = [], action) {
       return [
         ...state,
         {
-          task: action.task,
+          name:
+            action.name ||
+            new Md5()
+              .update(btoa(Math.random()).substring(0, 30))
+              .digest('hex'),
           date: Date.now(),
-          complete: false,
           key
         }
       ];

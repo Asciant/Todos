@@ -5,10 +5,10 @@ import {
   REORDER_COLUMN
 } from '../constants/actions';
 
-export function addColumn(column) {
+export function addColumn(name) {
   return {
     type: ADD_COLUMN,
-    column
+    name
   };
 }
 
