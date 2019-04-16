@@ -268,7 +268,7 @@
     "history": "^4.9.0",
     "md5.js": "^1.3.5",
     "react": "^16.8.6",
-    "react-beautiful-dnd": "^11.0.0",
+    "react-beautiful-dnd": "10.1.1",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.8.4",
     "@hot-loader/react-dom": "^16.8.6",

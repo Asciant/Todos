@@ -132,7 +132,7 @@ class Task extends Component {
     const { todo, index, removeTodo } = this.props;
 
     return (
-      <Draggable draggableId={todo.key} index={index}>
+      <Draggable draggableId={todo.key} index={index} type="task">
         {(provided, snapshot) => (
           <List
             {...provided.draggableProps}
@@ -193,7 +193,7 @@ Task.propTypes = {
   removeTodo: PropTypes.func.isRequired,
   todo: PropTypes.shape({
     task: PropTypes.string,
-    date: PropTypes.instanceOf(Date),
+    date: PropTypes.number,
     complete: PropTypes.bool,
     key: PropTypes.string
   }),
@@ -205,7 +205,7 @@ Task.defaultProps = {
   index: PropTypes.number,
   todo: PropTypes.shape({
     task: PropTypes.string,
-    date: PropTypes.instanceOf(Date),
+    date: PropTypes.number,
     complete: PropTypes.bool,
     key: PropTypes.string
   })
