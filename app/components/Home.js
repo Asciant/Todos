@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,11 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import routes from '../constants/routes';
 
-type Props = {};
-
-export default class Home extends Component<Props> {
-  props: Props;
-
+export default class Home extends Component {
   render() {
     return (
       <div data-tid="container">
