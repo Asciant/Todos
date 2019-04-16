@@ -1,7 +1,5 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
-export type todoStateType = Array<{}>;
-
 export type Action = {
   +type: string
 };

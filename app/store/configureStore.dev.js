@@ -4,14 +4,12 @@ import { createHashHistory } from 'history';
 import { routerMiddleware, routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createRootReducer from '../reducers';
-
-import * as todoActions from '../actions/todos';
-import type { todoStateType } from '../reducers/types';
+import actions from '../actions/index';
 
 const history = createHashHistory();
 
 const rootReducer = createRootReducer(history);
-const configureStore = (initialState?: todoStateType) => {
+const configureStore = (initialState?: []) => {
   // Redux Configuration
   const middleware = [];
   const enhancers = [];
@@ -36,7 +34,7 @@ const configureStore = (initialState?: todoStateType) => {
 
   // Redux DevTools Configuration
   const actionCreators = {
-    ...todoActions,
+    ...actions,
     ...routerActions
   };
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose

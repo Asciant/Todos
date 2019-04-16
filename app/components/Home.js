@@ -7,6 +7,7 @@ import routes from '../constants/routes';
 
 export default class Home extends Component {
   render() {
+    console.log(this.props);
     return (
       <div data-tid="container">
         <h2>Home</h2>
