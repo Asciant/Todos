@@ -40,6 +40,8 @@ class Column extends Component {
       error: false
     };
 
+    this.taskRef = React.createRef();
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -57,6 +59,7 @@ class Column extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const { column } = this.taskRef.current.dataset;
 
     // Destructure all the objects
     const { task } = this.state;
@@ -67,7 +70,7 @@ class Column extends Component {
     if (task.length === 0) {
       this.setState({ task, error: true });
     } else {
-      addTodo(task);
+      addTodo(task, column);
       this.setState({ task: '', error: false });
     }
   };
@@ -75,8 +78,6 @@ class Column extends Component {
   render() {
     const { column, index, todos } = this.props;
     const { task, error } = this.state;
-
-    console.log('this.props', this.props);
 
     return (
       <Draggable draggableId={column.key} index={index}>
@@ -94,19 +95,23 @@ class Column extends Component {
                 type="text"
                 placeholder="I need to do...."
                 name="task"
+                data-column={column.key}
+                ref={this.taskRef}
               />
             </form>
             {/*eslint-disable */}
-            <Droppable droppableId="column.key">
+            <Droppable droppableId={column.key}>
               {(provided, snapshot) => (
                 <TaskList
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   isDraggingOver={snapshot.isDraggingOver}
                 >
-                  {todos.map((d, i) => (
-                    <Task key={d.key} todo={d} index={i} />
-                  ))}
+                  {todos
+                    .filter(t => t.column === column.key)
+                    .map((t, i) => (
+                      <Task key={t.key} todo={t} index={i} />
+                    ))}
                   {provided.placeholder}
                 </TaskList>
               )}
