@@ -5,7 +5,8 @@ import {
   EDIT_TODO,
   REMOVE_TODO,
   TOGGLE_TODO,
-  REORDER_TODO
+  REORDER_TODO,
+  UPDATE_TODO_COLUMN
 } from '../constants/actions';
 
 function todoReducer(state = [], action) {
@@ -22,7 +23,8 @@ function todoReducer(state = [], action) {
           task: action.task,
           date: Date.now(),
           complete: false,
-          key
+          key,
+          column: action.column
         }
       ];
     }
@@ -78,6 +80,20 @@ function todoReducer(state = [], action) {
     }
     case REORDER_TODO: {
       return action.orderedTodos;
+    }
+    case UPDATE_TODO_COLUMN: {
+      const updatedTodo = Object.assign({}, action.todo, {
+        column: action.newColumnKey
+      });
+      return [
+        // State up until the todo's index
+        ...state.slice(0, action.index),
+        // Add our updated todo in place
+        updatedTodo,
+        // after the deleted one, until the end
+        ...state.slice(action.index + 1)
+        // essentially the todo is being omitted from the new array
+      ];
     }
     default:
       return state;
