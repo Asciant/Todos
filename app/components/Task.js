@@ -4,61 +4,105 @@ import { Draggable } from 'react-beautiful-dnd';
 import { distanceInWordsToNow } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faBars,
   faEdit,
   faTrashAlt,
   faCheckSquare
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
+import PropTypes from 'prop-types';
 
 const List = styled.div`
-  border: 1px solid lightgrey;
-  border-radius: 5px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(2, 1fr);
   grid-gap: 5px;
   margin-bottom: 10px;
-  background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
-`;
-const Icon = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  grid-row: span 2;
-  color: black;
+  padding-bottom: 5px;
+  background-color: ${props => (props.isDragging ? '#C9FBFF' : '#ffffff')};
+  border: ${props => (props.isDragging ? '1px solid #82b7bb' : 'none')};
 `;
 
-const Drag = styled.div`
-  grid-row: span 2;
+const Icon = styled.div`
+  margin: 5px;
+  grid-column: span 1
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #34d741;
 `;
+
+const Button = styled.button`
+  border-radius: 5px;
+  padding: 15px 25px;
+  font-size: 22px;
+  text-decoration: none;
+  display: inline-block;
+  &:active {
+    transform: translate(0px, 5px);
+    -webkit-transform: translate(0px, 5px);
+    box-shadow: 0px 1px 0px 0px;
+  }
+`;
+
+const Toggle = styled(Button)`
+  box-shadow: 0px 5px 0px 0px #15b358;
+  background-color: #2ecc71;
+  color: #000;
+  width: 100%;
+  border: none;
+  &:hover {
+    background-color: #48e68b;
+  }
+`;
+
+const Edit = styled(Button)`
+  box-shadow: 0px 5px 0px 0px #a3ab00;
+  background-color: #f7ff58;
+  color: #000;
+  width: auto;
+  border: none;
+  margin: 0 2px 0 2px;
+  &:hover {
+    background-color: #e4ec37;
+    box-shadow: 0px 5px 0px 0px #a3ab00;
+  }
+`;
+
+const Delete = styled(Button)`
+  box-shadow: 0px 5px 0px 0px #82b7bb;
+  border: none;
+  background-color: #c9fbff;
+  color: #000;
+  width: auto;
+  margin: 0 2px 0 2px;
+  &:hover {
+    background-color: #b3eaee;
+    box-shadow: 0px 5px 0px 0px #82b7bb;
+  }
+`;
+
 const Action = styled.div`
   grid-column: span 2;
-  grid-row: span 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  & span {
-    padding: 5px;
-    color: #34d741;
+  & ${Edit}, ${Delete} {
+    color: #264653;
+    opacity: 0;
+  }
+  &:hover ${Edit}, :hover ${Delete} {
+    opacity: 1;
   }
 `;
 const Content = styled.div`
-  grid-column: span 4;
-  grid-row: span 2;
+  grid-column: span 5;
   padding: 4px;
   & p {
-    color: #34d741;
+    color: #ff934f;
     margin: 4px 0;
   }
   & p:first-child {
     font-size: 1.2em;
     font-weight: bold;
-    color: #d533d6;
+    color: #264653;
   }
 `;
 
@@ -96,20 +140,19 @@ class Task extends Component {
             isDragging={snapshot.isDragging}
           >
             <Icon>
-              <span
+              <Toggle
                 onClick={handleToggle.bind(this, todo, index)}
-                role="link"
+                role="button"
                 tabIndex="0"
                 onKeyPress={handleToggle.bind(this, todo, index)}
               >
                 <FontAwesomeIcon
-                  size="2x"
                   icon={todo.complete ? faCheckSquare : faSquare}
                 />
-              </span>
+              </Toggle>
             </Icon>
 
-            <Content>
+            <Content {...provided.dragHandleProps}>
               <p>{todo.task}</p>
               <p>
                 Created{' '}
@@ -117,27 +160,23 @@ class Task extends Component {
               </p>
             </Content>
 
-            <Drag {...provided.dragHandleProps}>
-              <FontAwesomeIcon icon={faBars} size="2x" />
-            </Drag>
-
             <Action>
-              <span
+              <Edit
                 onClick={handleEdit.bind(this, todo, index)}
-                role="link"
+                role="button"
                 onKeyPress={handleEdit.bind(this, todo, index)}
                 tabIndex="0"
               >
-                <FontAwesomeIcon size="2x" icon={faEdit} />
-              </span>
-              <span
+                <FontAwesomeIcon icon={faEdit} />
+              </Edit>
+              <Delete
                 onClick={removeTodo.bind(this, todo, index)}
-                role="link"
+                role="button"
                 onKeyPress={removeTodo.bind(this, todo, index)}
                 tabIndex="0"
               >
-                <FontAwesomeIcon size="2x" icon={faTrashAlt} />
-              </span>
+                <FontAwesomeIcon icon={faTrashAlt} />
+              </Delete>
             </Action>
           </List>
         )}
@@ -145,5 +184,31 @@ class Task extends Component {
     );
   }
 }
+
+Task.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.object),
+  addTodo: PropTypes.func.isRequired,
+  reorderTodos: PropTypes.func.isRequired,
+  toggleTodo: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
+  todo: PropTypes.shape({
+    task: PropTypes.string,
+    date: PropTypes.instanceOf(Date),
+    complete: PropTypes.bool,
+    key: PropTypes.string
+  }),
+  index: PropTypes.number
+};
+
+Task.defaultProps = {
+  todos: PropTypes.array,
+  index: PropTypes.number,
+  todo: PropTypes.shape({
+    task: PropTypes.string,
+    date: PropTypes.instanceOf(Date),
+    complete: PropTypes.bool,
+    key: PropTypes.string
+  })
+};
 
 export default Task;
