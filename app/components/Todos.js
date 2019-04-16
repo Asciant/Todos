@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import routes from '../constants/routes';
 
 import Column from '../containers/ColumnPage';
 
@@ -9,20 +11,58 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 20px;
+  padding: 45px;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+`;
+
+const BackContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const Item = styled.div`
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
 `;
 
 const Input = styled.input`
-  padding: 0.8rem 1.6rem;
-  border-radius: 0.4rem;
-  transition: box-shadow var(300ms);
+  outline: 0;
+  background: #f2f2f2;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  font-size: 14px;
+  box-sizing: border-box;
   border-color: ${props => (props.error ? 'red' : 'none')};
-  background-color: ${props => (props.error ? 'red' : 'none')}
-  & ::placeholder {
-    color: #b0bec5;
+  background-color: ${props => (props.error ? 'red' : 'none')};
+  width: 100%;
+`;
+
+const Button = styled.button`
+  border-radius: 5px;
+  padding: 15px 25px;
+  font-size: 22px;
+  text-decoration: none;
+  display: inline-block;
+  &:active {
+    transform: translate(0px, 5px);
+    -webkit-transform: translate(0px, 5px);
+    box-shadow: 0px 1px 0px 0px;
   }
-  & :focus {
-    outline: none;
-    box-shadow: 0.2rem 0.8rem 1.6rem var(#4527a0);
+`;
+
+const Back = styled(Button)`
+  background-color: #55acee;
+  box-shadow: 0px 5px 0px 0px #3c93d5;
+  color: #000;
+  width: 100%;
+  border: none;
+  &:hover {
+    background-color: #6fc6ff;
   }
 `;
 
@@ -106,22 +146,36 @@ class Todos extends Component {
     const { task, error } = this.state;
 
     return (
-      <Container>
-        <form onSubmit={this.handleSubmit}>
-          <Input
-            error={error}
-            onChange={this.handleChange}
-            value={task}
-            type="text"
-            placeholder="I need to do...."
-            name="task"
-          />
-        </form>
+      <React.Fragment>
+        <BackContainer>
+          <Item>
+            <Link to={routes.HOME}>
+              <Back>Return home</Back>
+            </Link>
+          </Item>
+        </BackContainer>
 
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Column key="1" column={{ id: 1 }} />
-        </DragDropContext>
-      </Container>
+        <Container>
+          <Item>
+            <form onSubmit={this.handleSubmit}>
+              <Input
+                error={error}
+                onChange={this.handleChange}
+                value={task}
+                type="text"
+                placeholder="I need to do...."
+                name="task"
+              />
+            </form>
+          </Item>
+
+          <Item>
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <Column key="1" column={{ id: 1 }} />
+            </DragDropContext>
+          </Item>
+        </Container>
+      </React.Fragment>
     );
   }
 }
