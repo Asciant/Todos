@@ -3,13 +3,15 @@ import {
   EDIT_TODO,
   REMOVE_TODO,
   TOGGLE_TODO,
-  REORDER_TODO
+  REORDER_TODO,
+  UPDATE_TODO_COLUMN
 } from '../constants/actions';
 
-export function addTodo(task) {
+export function addTodo(task, column) {
   return {
     type: ADD_TODO,
-    task
+    task,
+    column
   };
 }
 
@@ -41,5 +43,14 @@ export function reorderTodos(orderedTodos) {
   return {
     type: REORDER_TODO,
     orderedTodos
+  };
+}
+
+export function updateTodoColumn(todo, index, newColumnKey) {
+  return {
+    type: UPDATE_TODO_COLUMN,
+    todo,
+    index,
+    newColumnKey
   };
 }

@@ -28,7 +28,7 @@ export function editColumn(column, index) {
   };
 }
 
-export function reorderColumn(orderedColumns) {
+export function reorderColumns(orderedColumns) {
   return {
     type: REORDER_COLUMN,
     orderedColumns
