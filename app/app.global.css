@@ -18,3 +18,7 @@ body {
   background-color: #ffc15e;
   font-family: 'system', sans-serif;
 }
+
+*:focus {
+  outline: none;
+}
