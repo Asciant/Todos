@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-
 import Column from '../containers/ColumnPage';
 
 const Container = styled.div`
@@ -57,11 +56,21 @@ class Home extends Component {
   }
 
   onDragEnd = result => {
-    const { destination, source } = result;
-    const { todos, reorderTodos } = this.props;
+    const { destination, source, draggableId, type } = result;
+    const {
+      columns,
+      todos,
+      reorderTodos,
+      reorderColumns,
+      updateTodoColumnAndReorder
+    } = this.props;
+
+    // draggableId is the key of the task's/column's that was dragged
+    // console.log(draggableId);
 
     if (!destination) {
-      return true;
+      // Nothing to do
+      return;
     }
 
     if (
@@ -69,25 +78,66 @@ class Home extends Component {
       destination.index === source.index
     ) {
       // User dropped back into same position
-      return true;
+      return;
     }
 
-    // We don't actually use the draggableId
-    // Our array is based on numerical indexes
-    // React Beautiful DND lost its mind when I provided 0 as the id
+    // * If the draggable is a column
+    if (type === 'column') {
+      // We only have one column - so don't get too fancy
+      // const column = source.droppableId;
+      const newColumnIds = Array.from(columns);
+      newColumnIds.splice(source.index, 1);
+      newColumnIds.splice(destination.index, 0, columns[source.index]);
 
-    // We only have one column - so don't get too fancy
-    // const column = source.droppableId;
-    const newTaskIds = Array.from(todos);
-    newTaskIds.splice(source.index, 1);
-    newTaskIds.splice(destination.index, 0, todos[source.index]);
+      reorderColumns(newColumnIds);
+      return;
+    }
 
-    reorderTodos(newTaskIds);
+    // * If the draggable is a todo and it is being
+    // * dropped inside the same droppable (todo list)
+    // * Eg. Reorder in the same column
+    const start = columns
+      .map(c => {
+        return c.key;
+      })
+      .indexOf(source.droppableId);
+
+    const finish = columns
+      .map(c => {
+        return c.key;
+      })
+      .indexOf(destination.droppableId);
+
+    if (start === finish) {
+      const newTaskIds = todos.filter(t => t.column === source.droppableId);
+      const draggedTodoId = todos.findIndex(t => t.key === draggableId);
+
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, todos[draggedTodoId]);
+
+      reorderTodos(newTaskIds, source.droppableId);
+
+      return;
+    }
+
+    // * Task being dropped from one column to another
+    // ? The order of the source is irrelivent
+    // ? The key of the todo will be updated to reflect the new column anyway
+
+    const draggedTodoId = todos.findIndex(t => t.key === draggableId);
+
+    updateTodoColumnAndReorder(
+      todos[draggedTodoId],
+      draggedTodoId,
+      destination.index,
+      destination.droppableId
+    );
+
+    // reorderTodos(finishTaskIds, destination.droppableId);
   };
 
   render() {
     const { columns, addColumn } = this.props;
-    console.log(this.props);
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
@@ -111,6 +161,7 @@ class Home extends Component {
                   {...provided.dragHandleProps}
                 />
               ))}
+              {provided.placeholder}
             </Container>
           )}
         </Droppable>
@@ -123,7 +174,9 @@ Home.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
   columns: PropTypes.arrayOf(PropTypes.object),
   reorderTodos: PropTypes.func.isRequired,
-  addColumn: PropTypes.func.isRequired
+  addColumn: PropTypes.func.isRequired,
+  reorderColumns: PropTypes.func.isRequired,
+  updateTodoColumnAndReorder: PropTypes.func.isRequired
 };
 
 Home.defaultProps = {

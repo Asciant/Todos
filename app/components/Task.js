@@ -132,7 +132,7 @@ class Task extends Component {
     const { todo, index, removeTodo } = this.props;
 
     return (
-      <Draggable draggableId={todo.key} index={index}>
+      <Draggable draggableId={todo.key} index={index} type="task">
         {(provided, snapshot) => (
           <List
             {...provided.draggableProps}

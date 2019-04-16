@@ -6,7 +6,7 @@ import {
   REMOVE_TODO,
   TOGGLE_TODO,
   REORDER_TODO,
-  UPDATE_TODO_COLUMN
+  UPDATE_TODO_COLUMN_AND_REORDER
 } from '../constants/actions';
 
 function todoReducer(state = [], action) {
@@ -79,21 +79,39 @@ function todoReducer(state = [], action) {
       ];
     }
     case REORDER_TODO: {
-      return action.orderedTodos;
+      // Find all the todos that match that column key
+      // Reorder them to match the order being supplied in reorderedTodos
+
+      const allOtherTodos = state.filter(t => t.column !== action.column);
+      return [...allOtherTodos, ...action.orderedTodos];
     }
-    case UPDATE_TODO_COLUMN: {
+    case UPDATE_TODO_COLUMN_AND_REORDER: {
+      // ? Update the todo so todo.colum = new column's key
       const updatedTodo = Object.assign({}, action.todo, {
         column: action.newColumnKey
       });
-      return [
-        // State up until the todo's index
+
+      // ? Put the updated todo into the new State (updatedTodos)
+      const updatedTodos = [
         ...state.slice(0, action.index),
-        // Add our updated todo in place
         updatedTodo,
-        // after the deleted one, until the end
         ...state.slice(action.index + 1)
-        // essentially the todo is being omitted from the new array
       ];
+
+      // ? The re-order component, get the todo into the right order in its column
+      const finishTaskIds = state.filter(t => t.column === action.newColumnKey);
+
+      finishTaskIds.splice(action.destinationIndex, 0, updatedTodo);
+
+      // ? We have to provide all the other todos so we don't trim the array
+      const allOtherTodos = updatedTodos.filter(
+        t => t.column !== action.newColumnKey
+      );
+
+      return [...allOtherTodos, ...finishTaskIds];
+
+      // const finishTaskIds = state.filter(t => t.column === action.newColumnKey);
+      // finishTaskIds.splice(destination.index, 0, todos[draggedTodoId]);
     }
     default:
       return state;
