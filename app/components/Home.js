@@ -53,11 +53,6 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
-    // React state
-    this.state = {
-      columns: []
-    };
-
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
@@ -91,19 +86,19 @@ class Home extends Component {
   };
 
   addNewColumn = () => {
-    this.setState(prevState => {
-      const { columns } = prevState;
-      const newIndex = columns.length + 1;
-      columns.push({ id: newIndex });
-      return {
-        ...prevState,
-        columns
-      };
-    });
+    // this.setState(prevState => {
+    //   const { columns } = prevState;
+    //   const newIndex = columns.length + 1;
+    //   columns.push({ id: newIndex });
+    //   return {
+    //     ...prevState,
+    //     columns
+    //   };
+    // });
   };
 
   render() {
-    const { columns } = this.state;
+    const { columns } = this.props;
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
@@ -124,23 +119,13 @@ class Home extends Component {
 
 Home.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
-  reorderTodos: PropTypes.func.isRequired,
-  todo: PropTypes.shape({
-    task: PropTypes.string,
-    date: PropTypes.number,
-    complete: PropTypes.bool,
-    key: PropTypes.string
-  })
+  columns: PropTypes.arrayOf(PropTypes.object),
+  reorderTodos: PropTypes.func.isRequired
 };
 
 Home.defaultProps = {
   todos: PropTypes.array,
-  todo: PropTypes.shape({
-    task: PropTypes.string,
-    date: PropTypes.number,
-    complete: PropTypes.bool,
-    key: PropTypes.string
-  })
+  columns: PropTypes.array
 };
 
 export default Home;

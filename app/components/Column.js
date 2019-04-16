@@ -6,7 +6,7 @@ import Task from '../containers/TaskPage';
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 20px;
   padding: 45px;
   background-color: #ffffff;
@@ -20,10 +20,8 @@ const TaskList = styled.div`
 `;
 
 const Item = styled.div`
-  width: auto;
+  display: grid;
   padding: 5px;
-  box-sizing: border-box;
-  min-width: 400px;
 `;
 
 const Input = styled.input`
@@ -36,7 +34,7 @@ const Input = styled.input`
   box-sizing: border-box;
   border-color: ${props => (props.error ? 'red' : 'none')};
   background-color: ${props => (props.error ? 'red' : 'none')};
-  width: auto;
+  min-width: 300px;
 `;
 
 class Column extends Component {
